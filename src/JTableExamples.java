@@ -5,10 +5,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TableModelEvent;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -146,6 +143,20 @@ public class JTableExamples {
 
         return total;
     }
+    public void resizeColumnWidth(JTable table) {
+        final TableColumnModel columnModel = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 15; // Min width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width +1 , width);
+            }
+            if(width > 300)
+                width=300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+    }
     public void tableChanged(TableModelEvent e) {
         int row = e.getFirstRow();
         int column = e.getColumn();
@@ -177,6 +188,8 @@ public class JTableExamples {
     JFrame f;
     // Table
     JTable j;
+
+    JButton button;
     JTable getTable(){
         return j;
     }
@@ -206,7 +219,7 @@ public class JTableExamples {
         }
         int rows = 15;
         for(int i = 0; i < 15; i++){
-            data[i][0]="" + i;
+            data[i][0]="Asistenta nr." + i;
             dataPontaje[i][0]= "Asistenta nr." + i;
         }
 
@@ -239,12 +252,20 @@ public class JTableExamples {
             zi.setCellEditor(new DefaultCellEditor(comboBox));
         }
 
-        JButton b=new JButton("Show");
-        b.setBounds(600,450,80,30);
+        JButton b=new JButton("Calculeaza pontaje");
+        b.setBounds(500,400,160,30);
+
         f.add(b);
-        JButton b2=new JButton("Fill");
-        b2.setBounds(600,500,80,30);
+        JButton b2=new JButton("Genereaza Grafic");
+        b2.setBounds(300,400,160,30);
         f.add(b2);
+
+        button= new JButton("Genereaza PDF");
+
+        //scrollPane = new JScrollPane(table);
+        button.setBounds(700,400,160,30);
+        f.add(button);
+
 
         JTable pontaje = new JTable(dataPontaje,columnNamesPontaje);
         b.addActionListener(new ActionListener() {
@@ -383,12 +404,14 @@ public class JTableExamples {
 
         j.getModel().addTableModelListener(this::tableChanged);
 
-
+        resizeColumnWidth(j);
+        resizeColumnWidth(pontaje);
     }
 
     // Driver  method
     public static void main(String[] args)
     {
-        new JTableExamples();
+        JTableExamples ex = new JTableExamples();
+
     }
 }

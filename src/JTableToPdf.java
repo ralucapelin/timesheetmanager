@@ -68,16 +68,14 @@ for(int i = 0; i <32; i++) {
     }
 
     public void createAndShowGui() {
-        frame = new JFrame("PDF creator");
-JTableExamples ex = new JTableExamples();
 
+        JTableExamples ex = new JTableExamples();
+        frame = ex.f;
         table = ex.getTable();
         table.setBorder(BorderFactory.createLineBorder(Color.RED));
-        button = new JButton("Create PDF");
 
-        //scrollPane = new JScrollPane(table);
 
-        button.addActionListener(new ActionListener() {
+        ex.button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -95,10 +93,9 @@ JTableExamples ex = new JTableExamples();
 
 //      frame.add(table.getTableHeader(), BorderLayout.NORTH);
        // frame.add(scrollPane, BorderLayout.CENTER);
-        frame.add(button, BorderLayout.SOUTH);
 
-        frame.pack();
-        frame.setVisible(true);
+        //frame.pack();
+        //frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
