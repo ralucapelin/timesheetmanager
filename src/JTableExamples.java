@@ -22,10 +22,23 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.Map;
 import java.util.Set;
 
 
 public class JTableExamples {
+     private Integer getPontaj(Object str){
+         HashMap<String, Integer> hm = new HashMap<>();
+         hm.put("Z",12);
+         hm.put("N",12);
+         hm.put("7",8);
+         hm.put("7S",8);
+         hm.put("ZP",12);
+         hm.put("7P",8);
+         hm.put("C", 0);
+         hm.put("/",0);
+         return hm.get(str);
+     }
     private static class CustomRenderer extends DefaultTableCellRenderer {
 
         private final TableModel model;
@@ -75,34 +88,18 @@ public class JTableExamples {
    YearMonth ym = YearMonth.now();
 
     public int sumRow(JTable mdl, int row) {
-        HashMap<String, Integer> hm = new HashMap<>();
-        hm.put("Z",12);
-        hm.put("N",12);
-        hm.put("7",8);
-        hm.put("7S",8);
-        hm.put("ZP",12);
-        hm.put("7P",8);
-        hm.put("C", 0);
-        hm.put("/",0);
+
         int total = 0;
         // iterate over all columns
         for (int i = 1 ; i < mdl.getColumnCount() ; i++) {
             // null or not Integer will throw exception
-            total += hm.get(mdl.getValueAt(row, i));
+            total += getPontaj((mdl.getValueAt(row, i)));
         }
 
         return total;
     }
     public int sumWeekend(JTable mdl, int row, YearMonth ym) {
-        HashMap<String, Integer> hm = new HashMap<>();
-        hm.put("Z",12);
-        hm.put("N",12);
-        hm.put("7",8);
-        hm.put("7S",8);
-        hm.put("ZP",12);
-        hm.put("7P",8);
-        hm.put("C", 0);
-        hm.put("/",0);
+
         int total = 0;
         // iterate over all columns
         int size = weekends(ym).size();
@@ -119,7 +116,7 @@ public class JTableExamples {
                     else if(i%2 == 1 && mdl.getValueAt(row,wk.get(i)-1) == "N") {
                         total += 7;
                     }else {
-                        total+=hm.get(mdl.getValueAt(row,wk.get(i)));
+                        total+=getPontaj(mdl.getValueAt(row,wk.get(i)));
                     }
 
                 }
@@ -134,7 +131,7 @@ public class JTableExamples {
                     total += 7;
                 }
                 else {
-                    total+=hm.get(mdl.getValueAt(row,wk.get(i)));
+                    total+=getPontaj(mdl.getValueAt(row,wk.get(i)));
                 }
             }
         }
@@ -146,10 +143,12 @@ public class JTableExamples {
     public void resizeColumnWidth(JTable table) {
         final TableColumnModel columnModel = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {
-            int width = 15; // Min width
+            int width = 30; // Min width
             JTableHeader head= table.getTableHeader();
-            Rectangle r = head.getHeaderRect(column);
-            width = r.width;
+
+            width =Math.max(table.getColumnName(column).length()*10,width);
+
+            System.out.println(width);
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
                 Component comp = table.prepareRenderer(renderer, row, column);
@@ -165,16 +164,8 @@ public class JTableExamples {
         int column = e.getColumn();
         TableModel model = (TableModel)e.getSource();
         Object data = model.getValueAt(row, column);
-        HashMap<String, Integer> hm = new HashMap<>();
-        hm.put("Z",12);
-        hm.put("N",12);
-        hm.put("7",8);
-        hm.put("7S",8);
-        hm.put("ZP",12);
-        hm.put("7P",8);
-        hm.put("C", 0);
-        hm.put("/",0);
-        dataPontaje[row][column]=""+hm.get((String)data);
+
+        dataPontaje[row][column]=""+getPontaj(data);
     }
     public int isComplete(String data[][], int n,int k){
         for(int i = 0; i < n ; i++){
@@ -298,15 +289,7 @@ public class JTableExamples {
 
         b2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HashMap<String, Integer> hm = new HashMap<>();
-                hm.put("Z",12);
-                hm.put("N",12);
-                hm.put("7",8);
-                hm.put("7S",8);
-                hm.put("ZP",12);
-                hm.put("7P",8);
-                hm.put("C", 0);
-                hm.put("/",0);
+
 
                 HashMap<String, Integer> hm2 = new HashMap<>();
                 hm2.put("Z",0);
@@ -344,16 +327,16 @@ public class JTableExamples {
                                     ore[index][at]++;
                                     if(tura.equals("N") && i < 31){
                                         data[index][i+1]="/";
-                                        dataPontaje[index][i+1]=""+hm.get("/");
+                                        dataPontaje[index][i+1]=""+getPontaj("/");
                                     }
                                     ture.remove(tureIndex);
                                     as.remove(idx);
-                                    dataPontaje[index][i]=""+hm.get(tura);
+                                    dataPontaje[index][i]=""+getPontaj(tura);
                                 }
                             }
                             else {
                                 data[index][i] = "/";
-                                dataPontaje[index][i]=""+hm.get("/");
+                                dataPontaje[index][i]=""+getPontaj("/");
                                 as.remove(idx);
                             }
 
@@ -406,7 +389,8 @@ public class JTableExamples {
         //
 
         j.getModel().addTableModelListener(this::tableChanged);
-
+        j.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        pontaje.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         resizeColumnWidth(j);
         resizeColumnWidth(pontaje);
     }
