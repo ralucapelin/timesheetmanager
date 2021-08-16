@@ -112,27 +112,37 @@ public class JTableExamples {
         ArrayList<Integer> wk = weekends(ym);
 
         if (size%2==1) {
-            if (wk.get(size-1)==31) {
+
+            if(wk.get(0)==1 && wk.get(1)==7){
+                System.out.println("da");
                 for(int i=0; i < size; i++){
-                    if(mdl.getValueAt(row,wk.get(i)-1) == "N"){
-                        total+=7;
-                    }
-                    i++;
-                    if(mdl.getValueAt(row,wk.get(i)) == "N"){
+                    if(i%2 == 0 && mdl.getValueAt(row,wk.get(i)) == "N"){
                         total+=5;
                     }
+                    else if(i%2 == 1 && mdl.getValueAt(row,wk.get(i)-1) == "N") {
+                        total += 7;
+                    }else {
+                        total+=hm.get(mdl.getValueAt(row,wk.get(i)));
+                    }
+
                 }
             }
-            else if(wk.get(0)==1 && wk.get(1)==6){
-
+        }
+        else {
+            for(int i=0; i < size; i++){
+                if(i%2 == 1 && mdl.getValueAt(row,wk.get(i)) == "N"){
+                    total+=5;
+                }
+                else if(i%2 == 0 && mdl.getValueAt(row,wk.get(i)-1) == "N") {
+                    total += 7;
+                }
+                else {
+                    total+=hm.get(mdl.getValueAt(row,wk.get(i)));
+                }
             }
         }
 
-        for(int i:weekends(ym)){
-            if(i>0){
-                total += hm.get(mdl.getValueAt(row, i));
-            }
-        }
+
 
         return total;
     }
