@@ -48,7 +48,7 @@ public class JTableExamples {
             return c;
         }
     }
-    private String[][] dataPontaje = new String[15][32];
+    private String[][] dataPontaje = new String[15][34];
     private ArrayList<Integer> weekends(YearMonth yearMonth){
         int len = yearMonth.lengthOfMonth();
         int first = yearMonth.atDay(1).getDayOfWeek().getValue();
@@ -197,6 +197,10 @@ public class JTableExamples {
         for(int i = 0; i<15; i++){
             for(int j = 1 ;j < 32; j++){
                 data[i][j]="";
+            }
+        }
+        for(int i = 0; i<15; i++){
+            for(int j = 1 ;j < 34; j++){
                 dataPontaje[i][j]="";
             }
         }
@@ -208,10 +212,15 @@ public class JTableExamples {
 
         // Column Names
         String[] columnNames = new String[32];
+        String[] columnNamesPontaje = new String[34];
         columnNames[0]="";
+        columnNamesPontaje[0]="";
         for(int i = 1 ; i<32; i++){
             columnNames[i]=""+i;
+            columnNamesPontaje[i]=""+i;
         }
+        columnNamesPontaje[32] = "Total";
+        columnNamesPontaje[33] = "Weekend";
         // Initializing the JTable
         j = new JTable(data, columnNames);
 
@@ -237,7 +246,7 @@ public class JTableExamples {
         b2.setBounds(600,500,80,30);
         f.add(b2);
 
-
+        JTable pontaje = new JTable(dataPontaje,columnNamesPontaje);
         b.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -250,13 +259,19 @@ public class JTableExamples {
                             break;
                         }
                     }
-                    if(ok==1)
+                    if(ok==1){
                         System.out.println("asistenta nr. " + i + " : " +sumRow(j,i) + ", " + sumWeekend(j,i,ym));
+                        dataPontaje[i][32]=""+sumRow(j,i);
+                        dataPontaje[i][33]=""+sumWeekend(j,i,ym);
+                        pontaje.repaint();
+
+                    }
+
                 }
 
             }
         });
-        JTable pontaje = new JTable(dataPontaje,columnNames);
+
         b2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 HashMap<String, Integer> hm = new HashMap<>();
