@@ -147,6 +147,9 @@ public class JTableExamples {
         final TableColumnModel columnModel = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {
             int width = 15; // Min width
+            JTableHeader head= table.getTableHeader();
+            Rectangle r = head.getHeaderRect(column);
+            width = r.width;
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
                 Component comp = table.prepareRenderer(renderer, row, column);
