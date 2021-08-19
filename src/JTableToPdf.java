@@ -41,7 +41,7 @@ public class JTableToPdf {
 
     public void openPdf() throws FileNotFoundException, DocumentException {
         document = new Document(PageSize.A4.rotate(), 30, 30, 30, 30);
-        writer = PdfWriter.getInstance(document, new FileOutputStream("myFile2.pdf"));
+        writer = PdfWriter.getInstance(document, new FileOutputStream("Grafic.pdf"));
         document.open();
     }
 
@@ -50,19 +50,28 @@ public class JTableToPdf {
     }
 
     public void addData(PdfPTable pdfTable) throws DocumentException {
-        pdfTable.setHeaderRows(1);
 
+        pdfTable.setHeaderRows(1);
+        pdfTable.setTotalWidth(710f);
+        pdfTable.setLockedWidth(true);
+        float[] widths = new float[] { 90f,20f,20f,20f,20f,20f,20f,20f,20f,
+                20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f,20f};
+        pdfTable.setWidths(widths);
 for(int i = 0; i <32; i++) {
+
     PdfPCell cell = new PdfPCell(new Paragraph(table.getColumnName(i)));
+
     cell.setBackgroundColor(new GrayColor(0.7f));
     pdfTable.addCell(cell);
 }
 
-        for (int i = 0; i < table.getRowCount(); i++) {
+       for (int i = 0; i < table.getRowCount(); i++) {
             for (int j = 0; j < table.getColumnCount(); j++) {
                 pdfTable.addCell(table.getModel().getValueAt(i, j).toString());
             }
         }
+
+
 
         document.add(pdfTable);
     }
